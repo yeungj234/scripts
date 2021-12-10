@@ -1,0 +1,35 @@
+---
+title: "Index Bam and export bam as bigwig file"
+author: "Joanna Yeung"
+date: "12/16/2020"
+output: html_document
+---
+
+```{r}
+library(Rsamtools)
+```
+
+```{r}
+# retrieve sample names and index Bams
+BamList <- dir(path="/rugpfs/fs0/risc_lab/scratch/jyeung/HeLA/ENCODE_ENCSR000AQ0/", pattern=".bam")
+for(i in BamList){
+  indexBam(paste0("/rugpfs/fs0/risc_lab/scratch/jyeung/HeLA/ENCODE_ENCSR000AQ0/", i))
+}
+```
+```{r}
+# $ means look for the pattern at the end of the word
+BamList <- dir(path="/rugpfs/fs0/risc_lab/scratch/jyeung/HeLA/ENCODE_ENCSR000AQ0", pattern=".bam$", full.names=T)
+
+# create coverage of bam file
+library(rtracklayer)
+BamCoverage <- lapply(BamList, coverage)
+
+#name samples in BamCoverage List 
+names(BamCoverage) <- gsub("/rugpfs/fs0/risc_lab/scratch/jyeung/HeLA/ENCODE_ENCSR000AQ0/", "", BamList)
+
+# export as bigwig file
+for(i in 1:length(BamCoverage)){
+ export.bw(BamCoverage[[i]], con=paste0("/rugpfs/fs0/risc_lab/scratch/jyeung/HeLA/ENCODE_ENCSR000AQ0/", names(BamCoverage)[i], ".bw")) 
+}
+```
+

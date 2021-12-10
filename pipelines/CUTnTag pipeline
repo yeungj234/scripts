@@ -1,0 +1,1 @@
+bash /rugpfs/fs0/risc_lab/store/risc_soft/pipeSeq/fastq2bam.sh -c /rugpfs/fs0/risc_lab/scratch/jyeung/HeLA/ENCODE_ENCSR000AQ0/fastq2bam_output -f /rugpfs/fs0/risc_lab/scratch/jyeung/HeLA/ENCODE_ENCSR000AQ0/fastq_files -s /rugpfs/fs0/risc_lab/scratch/jyeung/HeLA/ENCODE_ENCSR000AQ0/fastq_files/samples.txt -g hg38 --singleend

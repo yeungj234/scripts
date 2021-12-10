@@ -1,0 +1,44 @@
+---
+title: "bamtobigwig script"
+author: "Joanna Yeung"
+date: "11/25/2020"
+output: html_document
+---
+
+CUTnTag pipeline 11.24.2020
+```{r}
+# code for converting bam to coverage in R and then exporting as a bigwig file. 
+setwd("/rugpfs/fs0/risc_lab/scratch/jyeung/CnT1/CUTnTag_pipeline/")
+
+library(GenomicAlignments)
+library(rtracklayer)
+
+
+bam_files <- c() # create empty vector for path to bam files 
+coverageofbams <- list() # create empty vector for coverage objects created from bam files 
+
+# samplesNames is an object that stores all of the sample names, made previously. 
+for(i in 1:length(samplesNames)){
+  bam_files[i] <- dir(path=paste0("/rugpfs/fs0/risc_lab/scratch/jyeung/CnT1/CUTnTag_pipeline/", samplesNames[i]), pattern="rmdup.bam", full.names=T) # list path to bam files which are stored separately in each sample folder created from the pipeline 
+  
+  coverageofbams[[i]] <- coverage(bam_files[i]) # use coverage function from rtracklayer package to create RleList object of coverage for each bam file 
+  
+  names(coverageofbams)[[i]] <- samplesNames[i] # name coverage elements based on sampleNames 
+  
+  export.bw(coverageofbams[[i]], con=paste0("/rugpfs/fs0/risc_lab/scratch/jyeung/CnT1/CUTnTag_pipeline/", samplesNames[i], "/", samplesNames[i], "_bamtobigwig.bw")) #export coverage to bigwig into each sample's respective sample folder. 
+}
+```
+
+11.25.2020
+```{r}
+#downloaded a publicly available dataset for H3K27me3 in IMR90 cells from NCBI GEO's database. 
+
+# convert bam to bigwig for downstream comparisons between this dataset and my CUT&Tag dataset in IMR90 cells 
+setwd("/rugpfs/fs0/risc_lab/scratch/jyeung/CnT1/CUTnTag_pipeline/bamtobigwig")
+GEO_IMR90_H3K27me3_Coverage <- coverage("/rugpfs/fs0/risc_lab/scratch/jyeung/CnT1/CUTnTag_pipeline/bamtobigwig/GSM469968_UCSD.IMR90.H3K27me3.UCSD_313BFAAXX_2.bam")
+export.bw(GEO_IMR90_H3K27me3_Coverage, con="GEO_IMR90_H3K27me3_bamtobigwig.bw")
+```
+```{r}
+
+wigToBigWig("/rugpfs/fs0/risc_lab/scratch/jyeung/CnT1/CUTnTag_pipeline/bamtobigwig/GSM469968_UCSD.IM490.H3K27me3.wig.gz", seqinfo = NULL, dest = "/rugpfs/fs0/risc_lab/scratch/jyeung/CnT1/CUTnTag_pipeline/bamtobigwig/GEO_IMR90_H3K27me3_wigtobigwig.bw")
+```

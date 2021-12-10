@@ -1,3 +1,4 @@
+#Joanna is learning git
 #specify variables. 
 binLen=500 #binLen=500 because we want divide the genome into 500bp bins
 BAMFILE=/rugpfs/fs0/risc_lab/scratch/npagane/pipes/hela/HeLA/HeLA_001.trim.st.all.blft.qft.rmdup.bam
